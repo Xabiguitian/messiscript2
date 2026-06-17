@@ -1,0 +1,5 @@
+es/udc/paproject/backend/test/rest/controllers/ShoppingControllerTest.class
+es/udc/paproject/backend/test/model/services/UserServiceTest.class
+es/udc/paproject/backend/test/model/services/CatalogServiceTest.class
+es/udc/paproject/backend/test/rest/controllers/CatalogControllerTest.class
+es/udc/paproject/backend/test/model/services/ShoppingServiceTest.class

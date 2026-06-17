@@ -1,0 +1,61 @@
+DROP TABLE IF EXISTS Purchase;
+DROP TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS Room;
+DROP TABLE IF EXISTS Movie;
+DROP TABLE IF EXISTS User;
+
+CREATE TABLE User (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    userName VARCHAR(60) COLLATE latin1_bin NOT NULL,
+    password VARCHAR(60) NOT NULL, 
+    firstName VARCHAR(60) NOT NULL,
+    lastName VARCHAR(60) NOT NULL, 
+    email VARCHAR(60) NOT NULL,
+    role TINYINT NOT NULL,
+    CONSTRAINT UserPK PRIMARY KEY (id),
+    CONSTRAINT UserNameUniqueKey UNIQUE (userName)
+) ENGINE = InnoDB;
+
+CREATE INDEX UserIndexByUserName ON User (userName);
+
+CREATE TABLE Movie (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(60) NOT NULL,
+    summary VARCHAR(1024) NOT NULL,
+    duration INT NOT NULL,
+    CONSTRAINT MoviePK PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE Room (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+    capacity INT NOT NULL,
+    CONSTRAINT RoomPK PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE Session (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    movieId BIGINT NOT NULL,
+    roomId BIGINT NOT NULL,
+    date DATETIME NOT NULL,
+    price DECIMAL(11, 2) NOT NULL,
+    emptySeats INT NOT NULL,
+    CONSTRAINT SessionPK PRIMARY KEY (id),
+    CONSTRAINT SessionMovieIdFK FOREIGN KEY (movieId) REFERENCES Movie (id),
+    CONSTRAINT SessionRoomIdFK FOREIGN KEY (roomId) REFERENCES Room (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE Purchase (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    userId BIGINT NOT NULL,
+    sessionId BIGINT NOT NULL,
+    tickets INT NOT NULL,
+    creditCard VARCHAR(30) NOT NULL,
+    date DATETIME NOT NULL,
+    delivered TINYINT(1) NOT NULL,
+    CONSTRAINT PurchasePK PRIMARY KEY (id),
+    CONSTRAINT PurchaseUserIdFK FOREIGN KEY (userId) REFERENCES User (id),
+    CONSTRAINT PurchaseSessionIdFK FOREIGN KEY (sessionId) REFERENCES Session (id)
+) ENGINE = InnoDB;
+
+CREATE INDEX PurchaseIndexByUserIdDate ON Purchase (userId, date);
